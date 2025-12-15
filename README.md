@@ -92,4 +92,12 @@ Target threshold optimize et
 
 🔮 Tahmin Sistemi
 
+## 🎯 Ana Bileşenler ##
+flight_delay_system.py - Tüm pipeline'ı çalıştırır
+
+predict_flight_delay.py - Tahmin fonksiyonları
+
+FlightDelayFeatureEngineer class - Feature engineering
+
+SimpleFeatureEngineer class - Basit feature'lar
 
