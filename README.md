@@ -4,15 +4,15 @@
 Bu proje, hava durumu verilerini kullanarak uçuşların varışta gecikip gecikmeyeceğini tahmin eden bir makine öğrenmesi sistemidir.
 
 ## 📊 Hedefler ## 
-Mevcut Accuracy: %85-88
+- Mevcut Accuracy: %85-88
 
-Hedef Accuracy: %90+
+- Hedef Accuracy: %90+
 
-Kullanılan Model: XGBoost
+- Kullanılan Model: XGBoost
 
-Veri Kaynağı: Kaggle (Uçuş + Hava Durumu)
+- Veri Kaynağı: Kaggle (Uçuş + Hava Durumu)
 
-Tasarım: Leakage-free pipeline
+- Tasarım: Leakage-free pipeline
 
 ## ✨ Temel Özellikler ## 
 
@@ -31,15 +31,6 @@ Tasarım: Leakage-free pipeline
 
 ### 🔗 Kaggle Dataset Bağlantısı
 [Historical Flight and Weather Data USA](https://www.kaggle.com/datasets)
-
-## 🔧 Teknik Detaylar ##
-Model: XGBoost
-
-Accuracy: %85-88 (hedef %90+)
-
-Dataset: Kaggle - Historical Flight and Weather Data
-
-Özellik: Leakage-free tasarım
 
 ## 📁 Proje Yapısı ##
 
@@ -182,30 +173,30 @@ Leakage, modelin test sırasında test verisinden bilgi almasıdır. Bu hile gib
 
 ## ❓ Sık Sorulan Sorular
 1. 🤔 Neden DEPARTURE_DELAY kullanıyoruz? Bu leakage değil mi?
-HAYIR, leakage değil! Çünkü:
+- HAYIR, leakage değil! Çünkü:
 
-Uçak zaten kalktıktan sonra tahmin yapıyoruz
+- Uçak zaten kalktıktan sonra tahmin yapıyoruz
 
-Kalkış gecikmesi artık bilinen bir gerçek
+- Kalkış gecikmesi artık bilinen bir gerçek
 
-Gerçek hayat senaryosu: Uçak 15 dakika geç kalktı → Varışta da geç olacak
+- Gerçek hayat senaryosu: Uçak 15 dakika geç kalktı → Varışta da geç olacak
 
-Bu, modelin "gelecekten bilgi alması" değil, "şu andaki durumu bilmesi"
+- Bu, modelin "gelecekten bilgi alması" değil, "şu andaki durumu bilmesi"
 
 2 . 📁 Kaggle verisi yoksa ne olacak?
-Sistem otomatik örnek veri oluşturur:
+- Sistem otomatik örnek veri oluşturur:
 
-100.000 satır gerçekçi uçuş verisi
+- 100.000 satır gerçekçi uçuş verisi
 
-Simüle edilmiş hava durumu bilgileri
+- Simüle edilmiş hava durumu bilgileri
 
-Yaklaşık %85 accuracy ile çalışır
+- Yaklaşık %85 accuracy ile çalışır
 
-Gerçek veri indirildiğinde otomatik değiştirilir
+- Gerçek veri indirildiğinde otomatik değiştirilir
 
 3. 💾 Model nerede kaydediliyor?
-models/flight_delay_model_current.pkl → Mevcut en iyi model
+- models/flight_delay_model_current.pkl → Mevcut en iyi model
 
-models/flight_delay_model_90percent.pkl → %90 accuracy'e ulaşılırsa
+- models/flight_delay_model_90percent.pkl → %90 accuracy'e ulaşılırsa
 
-Model pickle formatında kaydedilir (joblib kullanarak)
+- Model pickle formatında kaydedilir (joblib kullanarak)
