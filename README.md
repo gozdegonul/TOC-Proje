@@ -167,7 +167,7 @@ scale_pos_weight	otomatik	Sınıf dengesizliği için
    - Gecikti (1): 34,568 uçuş (%34)
 
 ## 🚫 Leakage-Free Tasarım
-##❓ Leakage (Veri Sızıntısı) Nedir?
+## ❓ Leakage (Veri Sızıntısı) Nedir?
 
 Leakage, modelin test sırasında test verisinden bilgi almasıdır. Bu hile gibidir ve gerçek hayatta mümkün değildir.
 
