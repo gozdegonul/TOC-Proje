@@ -27,7 +27,7 @@ Tasarım: Leakage-free pipeline
 ✅ Otomatik veri yönetimi - Kaggle verisi yoksa örnek veri oluşturur
 
 
-##📁 Veri Seti ##
+## 📁 Veri Seti ##
 
 ### 🔗 Kaggle Dataset Bağlantısı
 [Historical Flight and Weather Data USA](https://www.kaggle.com/datasets)
