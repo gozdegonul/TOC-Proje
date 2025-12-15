@@ -1,7 +1,36 @@
 ## ✈️ Uçuş Gecikmesi Tahmin Sistemi ##
 
-## 📌 Proje Hakkında ##
-Hava durumu verilerini kullanarak uçuşların varışta gecikip gecikmeyeceğini tahmin eden makine öğrenmesi sistemi. %90 accuracy hedefliyoruz.
+## 🎯 Proje Hakkında ## 
+Bu proje, hava durumu verilerini kullanarak uçuşların varışta gecikip gecikmeyeceğini tahmin eden bir makine öğrenmesi sistemidir.
+
+## 📊 Hedefler ## 
+Mevcut Accuracy: %85-88
+
+Hedef Accuracy: %90+
+
+Kullanılan Model: XGBoost
+
+Veri Kaynağı: Kaggle (Uçuş + Hava Durumu)
+
+Tasarım: Leakage-free pipeline
+
+## ✨ Temel Özellikler ## 
+
+✅ Leakage-free tasarım - Test verisi hiç görülmüyor
+
+✅ Hava durumu entegrasyonu - Kalkış ve varış havaalanları
+
+✅ Gerçek zamanlı tahmin - API desteği
+
+✅ Toplu işlem - Çoklu uçuş tahmini
+
+✅ Otomatik veri yönetimi - Kaggle verisi yoksa örnek veri oluşturur
+
+
+##📁 Veri Seti ##
+
+### 🔗 Kaggle Dataset Bağlantısı
+[Historical Flight and Weather Data USA](https://www.kaggle.com/datasets)
 
 ## 🔧 Teknik Detaylar ##
 Model: XGBoost
