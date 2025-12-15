@@ -43,8 +43,6 @@ Dataset: Kaggle - Historical Flight and Weather Data
 
 ## 📁 Proje Yapısı ##
 
-text
-
 flight_delay/
 
 ├── data/              # Veri dosyaları
@@ -56,58 +54,52 @@ flight_delay/
 └── predict_flight_delay.py     # Tahmin fonksiyonu
 
 
-##🚀 Nasıl Çalıştırılır? ## 
-Kaggle'dan veriyi indir
-
-python flight_delay_system.py komutunu çalıştır
-
-Sistem otomatik modeli eğitir ve test eder
-
 ## 🎯 %90 Accuracy İçin ##
-Daha fazla veri kullan
+1. Daha fazla veri kullan
 
-Feature engineering geliştir
+2. Feature engineering geliştir
 
-Hyperparameter tuning yap
+3. Hyperparameter tuning yap
 
-Target threshold optimize et
+4. Target threshold optimize et
 
-🔧 Sistem Nasıl Çalışır?
+## 🔧 Sistem Nasıl Çalışır?
 
-📥 Veri Yükleme
+1. 📥 Veri Yükleme
 
-🧹 Veri Temizleme
+2. 🧹 Veri Temizleme
 
-🎯 Hedef Tanımı (DELAYED)
+3. 🎯 Hedef Tanımı (DELAYED)
 
-🔍 Feature Engineering
+4. 🔍 Feature Engineering
 
-📊 Train-Test Split (%80/%20)
+5. 📊 Train-Test Split (%80/%20)
 
-🤖 Model Eğitimi (XGBoost)
+6. 🤖 Model Eğitimi (XGBoost)
 
-📈 Değerlendirme
+7. 📈 Değerlendirme
 
-💾 Model Kaydetme
+8. 💾 Model Kaydetme
 
-🔮 Tahmin Sistemi
+9. 🔮 Tahmin Sistemi
 
 ## 🎯 Ana Bileşenler ##
-flight_delay_system.py - Tüm pipeline'ı çalıştırır
 
-predict_flight_delay.py - Tahmin fonksiyonları
+- flight_delay_system.py - Tüm pipeline'ı çalıştırır
 
-FlightDelayFeatureEngineer class - Feature engineering
+- predict_flight_delay.py - Tahmin fonksiyonları
 
-SimpleFeatureEngineer class - Basit feature'lar
+- FlightDelayFeatureEngineer class - Feature engineering
+
+- SimpleFeatureEngineer class - Basit feature'lar
 
 ## ⚙️ Feature Engineering ## 
 
-Zaman Feature'ları: IS_WEEKEND, IS_RUSH_HOUR, IS_NIGHT
+- Zaman Feature'ları: IS_WEEKEND, IS_RUSH_HOUR, IS_NIGHT
 
-Hava Durumu Feature'ları: BAD_WEATHER, HAS_RAIN
+- Hava Durumu Feature'ları: BAD_WEATHER, HAS_RAIN
 
-İstatistiksel Feature'lar: AIRLINE_DELAY_MEAN, ROUTE_POPULARITY
+- İstatistiksel Feature'lar: AIRLINE_DELAY_MEAN, ROUTE_POPULARITY
 
 ## 📊 Çalışma Akışı
 
@@ -134,7 +126,7 @@ Hava Durumu Feature'ları: BAD_WEATHER, HAS_RAIN
 <img width="814" height="412" alt="image" src="https://github.com/user-attachments/assets/4333726a-5a8c-4cc7-8c68-4b6ce83ad817" />
 
 ##  📊 Model Parametreleri ##  
-Parametre	Değer	Açıklama
+Parametre	      Değer	Açıklama
 
 n_estimators	500	Kullanılacak ağaç sayısı
 
@@ -161,9 +153,9 @@ Gerçek: 0     12,345       1,234   (TN: %91, FP: %9)
 Gerçek: 1      1,567       6,543   (FN: %19, TP: %81)
 
 ## 📊 Sınıf Dağılımı
-🎯 Gecikme Oranı: ~%34
+## 🎯 Gecikme Oranı: ~%34
 
-📊 Örnek Dağılımı:
+## 📊 Örnek Dağılımı:
 
    - Gecikmedi (0): 65,432 uçuş (%66)
      
@@ -175,7 +167,7 @@ Gerçek: 1      1,567       6,543   (FN: %19, TP: %81)
 Leakage, modelin test sırasında test verisinden bilgi almasıdır. Bu hile gibidir ve gerçek hayatta mümkün değildir.
 
 ## ❓ Sık Sorulan Sorular
-🤔 Neden DEPARTURE_DELAY kullanıyoruz? Bu leakage değil mi?
+1. 🤔 Neden DEPARTURE_DELAY kullanıyoruz? Bu leakage değil mi?
 HAYIR, leakage değil! Çünkü:
 
 Uçak zaten kalktıktan sonra tahmin yapıyoruz
@@ -186,7 +178,7 @@ Gerçek hayat senaryosu: Uçak 15 dakika geç kalktı → Varışta da geç olac
 
 Bu, modelin "gelecekten bilgi alması" değil, "şu andaki durumu bilmesi"
 
-📁 Kaggle verisi yoksa ne olacak?
+2 . 📁 Kaggle verisi yoksa ne olacak?
 Sistem otomatik örnek veri oluşturur:
 
 100.000 satır gerçekçi uçuş verisi
@@ -197,7 +189,7 @@ Yaklaşık %85 accuracy ile çalışır
 
 Gerçek veri indirildiğinde otomatik değiştirilir
 
-💾 Model nerede kaydediliyor?
+3. 💾 Model nerede kaydediliyor?
 models/flight_delay_model_current.pkl → Mevcut en iyi model
 
 models/flight_delay_model_90percent.pkl → %90 accuracy'e ulaşılırsa
