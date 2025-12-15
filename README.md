@@ -160,11 +160,11 @@ scale_pos_weight	otomatik	Sınıf dengesizliği için
 
 📋 Confusion Matrix Örneği
 
-               Tahmin: 0   Tahmin: 1
+               Tahmin: 0   Tahmin: 1   
+               Gerçek: 0     12,345       1,234   (TN: %91, FP: %9)
+               Gerçek: 1      1,567       6,543   (FN: %19, TP: %81)
                
-Gerçek: 0     12,345       1,234   (TN: %91, FP: %9)
 
-Gerçek: 1      1,567       6,543   (FN: %19, TP: %81)
 
 ## 📊 Sınıf Dağılımı
 ## 🎯 Gecikme Oranı: ~%34
