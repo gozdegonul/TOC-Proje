@@ -72,4 +72,24 @@ Hyperparameter tuning yap
 
 Target threshold optimize et
 
+🔧 Sistem Nasıl Çalışır?
+
+📥 Veri Yükleme
+
+🧹 Veri Temizleme
+
+🎯 Hedef Tanımı (DELAYED)
+
+🔍 Feature Engineering
+
+📊 Train-Test Split (%80/%20)
+
+🤖 Model Eğitimi (XGBoost)
+
+📈 Değerlendirme
+
+💾 Model Kaydetme
+
+🔮 Tahmin Sistemi
+
 
