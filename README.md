@@ -128,28 +128,42 @@ flight_delay/
 ##  📊 Model Parametreleri ##  
 Parametre	      Değer	Açıklama
 
-n_estimators	500	Kullanılacak ağaç sayısı
+
+n_estimators	 500	 Kullanılacak ağaç sayısı
+
 
 max_depth	8	Her ağacın maksimum derinliği
 
+
 learning_rate	0.05	Öğrenme hızı
+
 
 subsample	0.8	Her ağaç için %80 veri
 
+
 colsample_bytree	0.8	Her ağaç için %80 feature
 
+
 scale_pos_weight	otomatik	Sınıf dengesizliği için
+
 
 ##  📈 Performans 
 ##  🎯 Accuracy Metrikleri
 
 ✅ Test Accuracy: 85-88%
+
 ✅ Cross-Validation Mean: 84-87%
+
 ✅ ROC-AUC Score: 0.85-0.88
+
 ✅ F1-Score: 0.82-0.85
+
 📋 Confusion Matrix Örneği
+
                Tahmin: 0   Tahmin: 1
+               
 Gerçek: 0     12,345       1,234   (TN: %91, FP: %9)
+
 Gerçek: 1      1,567       6,543   (FN: %19, TP: %81)
 
 ## 📊 Sınıf Dağılımı
