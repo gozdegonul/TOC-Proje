@@ -7,6 +7,7 @@ import sys
 import pandas as pd
 import numpy as np
 import warnings
+from sklearn.metrics import f1_score
 warnings.filterwarnings('ignore')
 
 print("="*80)
@@ -378,12 +379,37 @@ class FlightDelayFeatureEngineer:
             X_fe['DESTINATION_LOW_VISIBILITY'] = (X_fe['DESTINATION_VISIBILITY'] < 3).astype(int)
         if 'DESTINATION_WIND_SPEED' in X_fe.columns:
             X_fe['DESTINATION_HIGH_WIND'] = (X_fe['DESTINATION_WIND_SPEED'] > 15).astype(int)
+        if 'DESTINATION_PRECIPITATION' in X_fe.columns:
+            X_fe['DESTINATION_RAIN'] = (X_fe['DESTINATION_PRECIPITATION'] > 0.1).astype(int)
         
         # 5. KÖTÜ HAVA KOMBİNASYONU
         bad_weather_cols = [col for col in X_fe.columns if 'LOW_VISIBILITY' in col or 
                           'HIGH_WIND' in col or 'RAIN' in col]
         if bad_weather_cols:
             X_fe['BAD_WEATHER'] = X_fe[bad_weather_cols].max(axis=1)
+
+        # 🔥 5.b HAVA DURUMU ŞİDDET SKORU (İYİLEŞTİRİLMİŞ)
+        weather_score = pd.Series(0, index=X_fe.index)
+
+        if 'ORIGIN_LOW_VISIBILITY' in X_fe.columns:
+            weather_score += X_fe['ORIGIN_LOW_VISIBILITY'] * 3.0
+
+        if 'ORIGIN_HIGH_WIND' in X_fe.columns:
+            weather_score += X_fe['ORIGIN_HIGH_WIND'] * 2.0
+
+        if 'ORIGIN_RAIN' in X_fe.columns:
+            weather_score += X_fe['ORIGIN_RAIN'] * 1.5
+
+        if 'DESTINATION_LOW_VISIBILITY' in X_fe.columns:
+            weather_score += X_fe['DESTINATION_LOW_VISIBILITY'] * 1.5
+
+        if 'DESTINATION_HIGH_WIND' in X_fe.columns:
+            weather_score += X_fe['DESTINATION_HIGH_WIND'] * 1.0
+
+        if 'DESTINATION_RAIN' in X_fe.columns:
+            weather_score += X_fe['DESTINATION_RAIN'] * 0.8
+
+        X_fe['WEATHER_SEVERITY_SCORE'] = weather_score
         
         # 6. MESAFE FEATURE'LARI
         if 'DISTANCE' in X_fe.columns:
@@ -492,12 +518,39 @@ class FlightDelayFeatureEngineer:
             X_fe['DESTINATION_LOW_VISIBILITY'] = (X_fe['DESTINATION_VISIBILITY'] < 3).astype(int)
         if 'DESTINATION_WIND_SPEED' in X_fe.columns:
             X_fe['DESTINATION_HIGH_WIND'] = (X_fe['DESTINATION_WIND_SPEED'] > 15).astype(int)
+        if 'DESTINATION_PRECIPITATION' in X_fe.columns:
+            X_fe['DESTINATION_RAIN'] = (X_fe['DESTINATION_PRECIPITATION'] > 0.1).astype(int)
         
         # 5. KÖTÜ HAVA KOMBİNASYONU
         bad_weather_cols = [col for col in X_fe.columns if 'LOW_VISIBILITY' in col or 
                           'HIGH_WIND' in col or 'RAIN' in col]
         if bad_weather_cols:
             X_fe['BAD_WEATHER'] = X_fe[bad_weather_cols].max(axis=1)
+
+       # 🔥 5.b HAVA DURUMU ŞİDDET SKORU (İYİLEŞTİRİLMİŞ)
+        weather_score = pd.Series(0, index=X_fe.index)  # ✅ Her satır için 0
+
+        # Kalkış havaalanı (daha kritik - daha yüksek ağırlık)
+        if 'ORIGIN_LOW_VISIBILITY' in X_fe.columns:
+            weather_score += X_fe['ORIGIN_LOW_VISIBILITY'] * 3.0  # 2 → 3
+
+        if 'ORIGIN_HIGH_WIND' in X_fe.columns:
+            weather_score += X_fe['ORIGIN_HIGH_WIND'] * 2.0  # 1.5 → 2
+
+        if 'ORIGIN_RAIN' in X_fe.columns:
+            weather_score += X_fe['ORIGIN_RAIN'] * 1.5  # 1 → 1.5
+
+        # Varış havaalanı (daha az kritik)
+        if 'DESTINATION_LOW_VISIBILITY' in X_fe.columns:
+            weather_score += X_fe['DESTINATION_LOW_VISIBILITY'] * 1.5
+
+        if 'DESTINATION_HIGH_WIND' in X_fe.columns:
+            weather_score += X_fe['DESTINATION_HIGH_WIND'] * 1.0
+
+        if 'DESTINATION_RAIN' in X_fe.columns:
+            weather_score += X_fe['DESTINATION_RAIN'] * 0.8  # Yeni
+
+        X_fe['WEATHER_SEVERITY_SCORE'] = weather_score
         
         # 6. MESAFE FEATURE'LARI
         if 'DISTANCE' in X_fe.columns:
@@ -661,13 +714,13 @@ def train_flight_delay_model(df):
                     'PRECIPITATION', 'PRESSURE', 'CLOUD_COVER'])]
     
     # En önemli 10 hava durumu feature'ını seç
-    if len(weather_cols) > 10:
+    if len(weather_cols) > 15:
         # Korelasyona göre seç
         if 'DELAYED' in df.columns:
             correlations = df[weather_cols + ['DELAYED']].corr()['DELAYED'].abs().sort_values(ascending=False)
-            top_weather_cols = correlations.index[1:11].tolist()  # DELAYED'i çıkar
+            top_weather_cols = correlations.index[1:16].tolist()  # DELAYED'i çıkar
         else:
-            top_weather_cols = weather_cols[:10]
+            top_weather_cols = weather_cols[:15]
     else:
         top_weather_cols = weather_cols
     
@@ -710,11 +763,13 @@ def train_flight_delay_model(df):
     
     # Optimize edilmiş XGBoost modeli
     xgb_model = xgb.XGBClassifier(
-        n_estimators=500,
+        n_estimators=900,
         max_depth=8,
-        learning_rate=0.05,
+        min_child_weight=5,  # YENİ
+        learning_rate=0.01, 
         subsample=0.8,
         colsample_bytree=0.8,
+        gamma=0.2,               # YENİ
         reg_alpha=0.1,
         reg_lambda=1.0,
         scale_pos_weight=scale_pos_weight,
@@ -723,7 +778,8 @@ def train_flight_delay_model(df):
         eval_metric='logloss',
         tree_method='hist',
         n_jobs=-1,
-        verbosity=0
+        verbosity=0,
+        max_delta_step=1
     )
     
     # 5. CROSS-VALIDATION
@@ -731,10 +787,10 @@ def train_flight_delay_model(df):
     
     cv_scores = cross_val_score(
         xgb_model, X_train_fe, y_train,
-        cv=5, scoring='accuracy', n_jobs=-1
+        cv=5, scoring='f1', n_jobs=-1
     )
     
-    print(f"   📊 CV Accuracy: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
+    print(f"   📊 CV F1 Accuracy: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
     
     # 6. MODEL EĞİTİMİ
     print("\n   6. Model eğitiliyor...")
@@ -756,7 +812,7 @@ def train_flight_delay_model(df):
     # 8. THRESHOLD OPTIMIZATION (%90 ACCURACY İÇİN)
     print("\n   8. Threshold optimizasyonu (90% accuracy için)...")
     
-    thresholds = np.linspace(0.3, 0.8, 60)
+    thresholds = np.linspace(0.3, 0.8, 200)
     best_threshold = 0.6
     best_accuracy = 0
     
